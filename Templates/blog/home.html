@@ -1,0 +1,483 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}Home - MyBlog{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Animated Background -->
+<section class="hero-section">
+    <div class="hero-particles"></div>
+    <div class="container">
+        <div class="hero-content animate__animated animate__fadeInUp">
+            <span class="hero-badge">Welcome to MyBlog</span>
+            <h1 class="hero-title">
+                Discover Amazing <span class="gradient-text">Stories</span>
+            </h1>
+            <p class="hero-description">
+                Join thousands of readers exploring insightful articles, 
+                expert opinions, and creative ideas from talented writers worldwide.
+            </p>
+            <div class="hero-buttons">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-primary btn-large">
+                    <i class="fas fa-book-open"></i>
+                    Start Reading
+                </a>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="btn btn-outline-light btn-large">
+                    <i class="fas fa-user-plus"></i>
+                    Join Community
+                </a>
+                {% endif %}
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Articles</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10k+</span>
+                    <span class="stat-label">Readers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Writers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-shape">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Featured Posts Section -->
+<section class="featured-posts section-padding">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle">Featured Stories</span>
+            <h2 class="section-title">Editor's <span class="gradient-text">Picks</span></h2>
+            <p class="section-description">
+                Handpicked articles that showcase the best of our blog
+            </p>
+        </div>
+        
+        {% if featured_posts %}
+        <div class="featured-grid">
+            {% for post in featured_posts %}
+            <article class="featured-card {% if forloop.first %}featured-large{% endif %}">
+                <div class="card-image-wrapper">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="card-image">
+                    {% else %}
+                    <div class="card-image placeholder">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-categories">
+                        {% for category in post.categories.all|slice:":2" %}
+                        <span class="category-badge">{{ category.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="card-content">
+                    <div class="card-meta">
+                        <span class="meta-item">
+                            <i class="far fa-calendar-alt"></i> {{ post.created_at|date:"M d, Y" }}
+                        </span>
+                        <span class="meta-item">
+                            <i class="far fa-clock"></i> 
+                        </span>
+                    </div>
+                    
+                    <h3 class="card-title">
+                        <a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a>
+                    </h3>
+                    
+                    <p class="card-excerpt">{{ post.excerpt|default:post.content|truncatewords:25 }}</p>
+                    
+                    <div class="card-footer">
+                        <div class="author-info">
+                            <img src="https://ui-avatars.com/api/?name={{ post.author.username }}&size=40" 
+                                 alt="{{ post.author.username }}" class="author-avatar">
+                            <span class="author-name">{{ post.author.get_full_name|default:post.author.username }}</span>
+                        </div>
+                        
+                        <div class="card-stats">
+                            <span><i class="far fa-heart"></i> {{ post.likes.count|default:0 }}</span>
+                            <span><i class="far fa-comment"></i> {{ post.comments.count }}</span>
+                        </div>
+                        
+                        <a href="{% url 'blog:post_detail' post.id %}" class="read-more-link">
+                            Read <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-newspaper"></i>
+            </div>
+            <h3>No featured posts yet</h3>
+            <p>Check back soon for our editor's picks!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Categories Section with Icons -->
+<section class="categories-section section-padding bg-light">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle">Explore Topics</span>
+            <h2 class="section-title">Browse by <span class="gradient-text">Category</span></h2>
+            <p class="section-description">
+                Find articles that match your interests
+            </p>
+        </div>
+        
+        <div class="categories-grid">
+            {% for category in categories %}
+            <a href="{% url 'blog:category_posts' category.slug %}" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-{{ category.icon|default:'folder' }}"></i>
+                </div>
+                <h3 class="category-name">{{ category.name }}</h3>
+                <p class="category-description">{{ category.description|truncatewords:10 }}</p>
+                <span class="category-count">{{ category.posts.count }} articles</span>
+                <span class="category-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </span>
+            </a>
+            {% empty %}
+            <div class="no-categories">
+                <p>Categories coming soon...</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Posts with Modern Layout -->
+<section class="recent-posts section-padding">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle">Latest Updates</span>
+            <h2 class="section-title">Recent <span class="gradient-text">Articles</span></h2>
+            <p class="section-description">
+                Fresh content from our talented writers
+            </p>
+        </div>
+        
+        <div class="posts-grid">
+            {% for post in recent_posts %}
+            <article class="post-card">
+                <div class="post-card-image">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                    <div class="image-placeholder">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="post-card-content">
+                    <div class="post-card-meta">
+                        <span class="post-date">
+                            <i class="far fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}
+                        </span>
+                        <span class="post-category">
+                            {% for category in post.categories.all|slice:":1" %}
+                            <i class="far fa-folder"></i> {{ category.name }}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    
+                    <h3 class="post-card-title">
+                        <a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a>
+                    </h3>
+                    
+                    <p class="post-card-excerpt">{{ post.excerpt|default:post.content|truncatewords:20 }}</p>
+                    
+                    <div class="post-card-footer">
+                        <div class="post-author">
+                            <img src="https://ui-avatars.com/api/?name={{ post.author.username }}&size=30" 
+                                 alt="{{ post.author.username }}">
+                            <span>{{ post.author.username }}</span>
+                        </div>
+                        
+                        <a href="{% url 'blog:post_detail' post.id %}" class="read-more-btn">
+                            Read More <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        
+        <div class="view-all-container">
+            <a href="{% url 'blog:post_list' %}" class="btn btn-outline-primary btn-large">
+                View All Articles
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section with Parallax -->
+<section class="newsletter-section section-padding">
+    <div class="newsletter-parallax"></div>
+    <div class="container">
+        <div class="newsletter-content">
+            <span class="newsletter-badge">Stay Updated</span>
+            <h2 class="newsletter-title">Never Miss a <span class="gradient-text">Story</span></h2>
+            <p class="newsletter-description">
+                Subscribe to our newsletter and get the latest articles delivered to your inbox
+            </p>
+            
+            <form class="newsletter-form-large" id="newsletterForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="email" 
+                           placeholder="Enter your email address" 
+                           required
+                           class="newsletter-input">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        Subscribe
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p class="form-note">
+                    <i class="fas fa-shield-alt"></i>
+                    No spam. Unsubscribe anytime.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Tags Section -->
+<section class="tags-section section-padding bg-light">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle">Popular Topics</span>
+            <h2 class="section-title">Trending <span class="gradient-text">Tags</span></h2>
+        </div>
+        
+        <div class="tags-cloud">
+            {% for category in categories %}
+            <a href="{% url 'blog:category_posts' category.slug %}" 
+               class="tag-item"
+               style="--tag-size: {{ category.posts.count|add:10 }}px;">
+                #{{ category.name }}
+                <span class="tag-count">{{ category.posts.count }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section section-padding">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle">Testimonials</span>
+            <h2 class="section-title">What Our <span class="gradient-text">Readers</span> Say</h2>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "This blog has become my daily dose of inspiration. The quality of content is outstanding!"
+                </p>
+                <div class="testimonial-author">
+                    <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&size=50" alt="Sarah Johnson">
+                    <div>
+                        <h4>Sarah Johnson</h4>
+                        <span>Regular Reader</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "I've learned so much from the articles here. The writers are truly knowledgeable."
+                </p>
+                <div class="testimonial-author">
+                    <img src="https://ui-avatars.com/api/?name=Mike+Chen&size=50" alt="Mike Chen">
+                    <div>
+                        <h4>Mike Chen</h4>
+                        <span>Tech Enthusiast</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "The community here is amazing. I've connected with so many like-minded people."
+                </p>
+                <div class="testimonial-author">
+                    <img src="https://ui-avatars.com/api/?name=Emma+Wilson&size=50" alt="Emma Wilson">
+                    <div>
+                        <h4>Emma Wilson</h4>
+                        <span>Community Member</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Start Reading?</h2>
+            <p class="cta-description">
+                Join thousands of readers discovering amazing content every day
+            </p>
+            <div class="cta-buttons">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-primary btn-large">
+                    <i class="fas fa-book-open"></i>
+                    Browse Articles
+                </a>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="btn btn-outline-light btn-large">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animated counter for hero stats
+    function animateStats() {
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+            const target = parseInt(stat.innerText.replace('+', ''));
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    stat.innerText = target + '+';
+                    clearInterval(timer);
+                } else {
+                    stat.innerText = Math.floor(current) + '+';
+                }
+            }, 20);
+        });
+    }
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+                
+                // Animate stats when they come into view
+                if (entry.target.classList.contains('hero-stats')) {
+                    animateStats();
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements
+    document.querySelectorAll('.featured-card, .category-card, .post-card, .testimonial-card').forEach(el => {
+        observer.observe(el);
+    });
+    observer.observe(document.querySelector('.hero-stats'));
+
+    // Newsletter form submission
+    document.getElementById('newsletterForm')?.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = this.querySelector('input[type="email"]').value;
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+        submitBtn.disabled = true;
+        
+        try {
+            const response = await fetch('/subscribe/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ email: email })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                showNotification('Thanks for subscribing! Check your email.', 'success');
+                this.reset();
+            } else {
+                showNotification('Something went wrong. Please try again.', 'error');
+            }
+        } catch (error) {
+            showNotification('Network error. Please try again.', 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Particle animation for hero section
+    function createParticles() {
+        const particlesContainer = document.querySelector('.hero-particles');
+        if (!particlesContainer) return;
+        
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            particle.style.animationDuration = Math.random() * 10 + 10 + 's';
+            particlesContainer.appendChild(particle);
+        }
+    }
+    
+    createParticles();
+</script>
+{% endblock %}

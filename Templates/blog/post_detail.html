@@ -1,0 +1,235 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - My Django Blog{% endblock %}
+
+{% block content %}
+<article class="post-detail">
+    <!-- Post Header -->
+    <header class="post-header">
+        <div class="container">
+            <div class="post-categories">
+                {% for category in post.categories.all %}
+                <a href="{% url 'blog:category_posts' category.slug %}" class="category-badge">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+            
+            <h1 class="post-title">{{ post.title }}</h1>
+            
+            <div class="post-meta-large">
+                <div class="post-author">
+                    <img src="https://ui-avatars.com/api/?name={{ post.author.username }}&size=48" alt="{{ post.author.username }}">
+                    <div>
+                        <span>Written by</span>
+                        <strong>{{ post.author.get_full_name|default:post.author.username }}</strong>
+                    </div>
+                </div>
+                
+                <div class="post-date">
+                    <i class="far fa-calendar-alt"></i>
+                    <div>
+                        <span>Published on</span>
+                        <strong>{{ post.published_at|date:"F j, Y" }}</strong>
+                    </div>
+                </div>
+                
+                <div class="post-read-time">
+                    <i class="far fa-clock"></i>
+                    <div>
+                        <span>Read time</span>
+                        <strong>{{ post.content|wordcount|add:200|floatformat:0 }} min read</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Featured Image -->
+    {% if post.featured_image %}
+    <div class="post-featured-image">
+        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+    </div>
+    {% endif %}
+    
+    <!-- Post Content -->
+    <div class="post-content-wrapper">
+        <div class="container">
+            <div class="post-content-grid">
+                <!-- Social Share Sidebar -->
+                <div class="post-share-sidebar">
+                    <div class="share-sticky">
+                        <span>Share</span>
+                        <a href="#" class="share-facebook" onclick="shareOnFacebook()">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="share-twitter" onclick="shareOnTwitter()">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="share-linkedin" onclick="shareOnLinkedIn()">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="share-whatsapp" onclick="shareOnWhatsApp()">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="share-copy" onclick="copyLink()">
+                            <i class="fas fa-link"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="post-main-content">
+                    <div class="post-body">
+                        {{ post.content|linebreaks }}
+                    </div>
+                    
+                    <!-- Post Tags -->
+                    <div class="post-tags">
+                        <strong>Tags:</strong>
+                        {% for category in post.categories.all %}
+                        <a href="{% url 'blog:category_posts' category.slug %}" class="tag">#{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Author Box -->
+                    <div class="author-box">
+                        <img src="https://ui-avatars.com/api/?name={{ post.author.username }}&size=100" alt="{{ post.author.username }}">
+                        <div class="author-info">
+                            <h3>About {{ post.author.get_full_name|default:post.author.username }}</h3>
+                            <p>{{ post.author.profile.bio|default:"Author bio goes here." }}</p>
+                            <div class="author-social">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-github"></i></a>
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Post Navigation -->
+                    <div class="post-navigation">
+                        {% if prev_post %}
+                        <a href="{% url 'blog:post_detail' prev_post.id %}" class="prev-post">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Previous Post</span>
+                            <h4>{{ prev_post.title }}</h4>
+                        </a>
+                        {% endif %}
+                        
+                        {% if next_post %}
+                        <a href="{% url 'blog:post_detail' next_post.id %}" class="next-post">
+                            <span>Next Post</span>
+                            <i class="fas fa-arrow-right"></i>
+                            <h4>{{ next_post.title }}</h4>
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="comments-section">
+                        <h3>Comments ({{ comments.count }})</h3>
+                        
+                        <!-- Comment Form -->
+                        <div class="comment-form-wrapper">
+                            <h4>Leave a Comment</h4>
+                            <form method="POST" action="{% url 'blog:add_comment' post.id %}" class="comment-form" id="commentForm">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="text" name="name" placeholder="Your Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" name="email" placeholder="Your Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <textarea name="content" placeholder="Your Comment" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Comments List -->
+                        <div class="comments-list">
+                            {% for comment in comments %}
+                            <div class="comment">
+                                <div class="comment-avatar">
+                                    <img src="https://ui-avatars.com/api/?name={{ comment.name }}&size=50" alt="{{ comment.name }}">
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <h4>{{ comment.name }}</h4>
+                                        <span class="comment-date">{{ comment.created_at|date:"F j, Y" }}</span>
+                                    </div>
+                                    <p>{{ comment.content }}</p>
+                                    <button class="reply-btn" onclick="replyToComment('{{ comment.name }}')">
+                                        <i class="fas fa-reply"></i> Reply
+                                    </button>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="no-comments">No comments yet. Be the first to comment!</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Related Posts Sidebar -->
+                <div class="post-related-sidebar">
+                    <div class="related-sticky">
+                        <h3>Related Posts</h3>
+                        {% for related in related_posts %}
+                        <div class="related-post">
+                            {% if related.featured_image %}
+                            <img src="{{ related.featured_image.url }}" alt="{{ related.title }}">
+                            {% endif %}
+                            <h4><a href="{% url 'blog:post_detail' related.id %}">{{ related.title }}</a></h4>
+                            <span class="date">{{ related.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<script>
+    // Social sharing functions
+    function shareOnFacebook() {
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank');
+    }
+    
+    function shareOnTwitter() {
+        window.open('https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('{{ post.title }}'), '_blank');
+    }
+    
+    function shareOnLinkedIn() {
+        window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(window.location.href) + '&title=' + encodeURIComponent('{{ post.title }}'), '_blank');
+    }
+    
+    function shareOnWhatsApp() {
+        window.open('https://wa.me/?text=' + encodeURIComponent('{{ post.title }} - ' + window.location.href), '_blank');
+    }
+    
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href).then(function() {
+            alert('Link copied to clipboard!');
+        });
+    }
+    
+    function replyToComment(commenterName) {
+        const commentForm = document.getElementById('commentForm');
+        const textarea = commentForm.querySelector('textarea');
+        textarea.value = '@' + commenterName + ' ';
+        textarea.focus();
+    }
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,1491 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - MyBlog{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="contact-hero">
+    <div class="container">
+        <div class="contact-hero-content">
+            <span class="hero-badge">Get in Touch</span>
+            <h1 class="hero-title">We'd love to hear <span class="gradient-text">from you</span></h1>
+            <p class="hero-subtitle">Have a question, suggestion, or just want to say hello? Our team is here to help.</p>
+        </div>
+    </div>
+    <div class="hero-shape">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Contact Info Cards -->
+<section class="info-cards-section">
+    <div class="container">
+        <div class="info-cards-grid">
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3 class="info-card-title">Visit Us</h3>
+                <p class="info-card-text">123 Blog Street<br>San Francisco, CA 94105<br>United States</p>
+                <a href="https://maps.google.com" target="_blank" class="info-card-link">
+                    <i class="fas fa-directions"></i> Get Directions
+                </a>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h3 class="info-card-title">Call Us</h3>
+                <p class="info-card-text">+1 (555) 123-4567<br>+1 (555) 765-4321</p>
+                <p class="info-card-hours">Mon-Fri, 9:00 AM - 6:00 PM PST</p>
+                <a href="tel:+15551234567" class="info-card-link">
+                    <i class="fas fa-phone"></i> Call Now
+                </a>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3 class="info-card-title">Email Us</h3>
+                <p class="info-card-text">hello@myblog.com<br>support@myblog.com<br>careers@myblog.com</p>
+                <a href="mailto:hello@myblog.com" class="info-card-link">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </a>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="info-card-title">Business Hours</h3>
+                <p class="info-card-text">
+                    Monday - Friday: 9am - 6pm<br>
+                    Saturday: 10am - 4pm<br>
+                    Sunday: Closed
+                </p>
+                <span class="info-card-status">
+                    <span class="status-dot"></span> Currently Open
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Contact Section -->
+<section class="contact-main-section">
+    <div class="container">
+        <div class="contact-grid">
+            <!-- Contact Form -->
+            <div class="contact-form-wrapper">
+                <div class="form-header">
+                    <span class="form-badge">Send a Message</span>
+                    <h2 class="form-title">Let's start a <span class="gradient-text">conversation</span></h2>
+                    <p class="form-description">Fill out the form below and we'll get back to you within 24 hours.</p>
+                </div>
+                
+                <form method="POST" action="{% url 'blog:contact_submit' %}" class="contact-form" id="contactForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">
+                                <i class="fas fa-user"></i>
+                                Your Name <span class="required">*</span>
+                            </label>
+                            <input type="text" 
+                                   id="name" 
+                                   name="name" 
+                                   placeholder="John Doe" 
+                                   required
+                                   class="form-control">
+                            <div class="error-message" id="nameError"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i>
+                                Email Address <span class="required">*</span>
+                            </label>
+                            <input type="email" 
+                                   id="email" 
+                                   name="email" 
+                                   placeholder="john@example.com" 
+                                   required
+                                   class="form-control">
+                            <div class="error-message" id="emailError"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">
+                                <i class="fas fa-phone"></i>
+                                Phone Number
+                            </label>
+                            <input type="tel" 
+                                   id="phone" 
+                                   name="phone" 
+                                   placeholder="+1 (555) 000-0000"
+                                   class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">
+                                <i class="fas fa-tag"></i>
+                                Subject <span class="required">*</span>
+                            </label>
+                            <select id="subject" name="subject" required class="form-control">
+                                <option value="" disabled selected>Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="partnership">Partnership Opportunity</option>
+                                <option value="careers">Careers</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">
+                            <i class="fas fa-comment"></i>
+                            Message <span class="required">*</span>
+                        </label>
+                        <textarea id="message" 
+                                  name="message" 
+                                  rows="6" 
+                                  placeholder="Tell us how we can help you..." 
+                                  required
+                                  class="form-control"></textarea>
+                        <div class="character-count">
+                            <span id="charCount">0</span>/500
+                        </div>
+                        <div class="error-message" id="messageError"></div>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="privacy" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" class="privacy-link">Privacy Policy</a> and consent to being contacted <span class="required">*</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <span class="btn-text">Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                            <div class="spinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="form-note">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Your information is secure and will never be shared with third parties.</span>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Contact Sidebar -->
+            <div class="contact-sidebar">
+                <!-- FAQ Preview -->
+                <div class="sidebar-widget faq-widget">
+                    <h3 class="widget-title">
+                        <i class="fas fa-question-circle"></i>
+                        Frequently Asked
+                    </h3>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>How quickly do you respond?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We typically respond within 24 hours during business days.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Do you offer technical support?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes, our technical support team is available Monday-Friday, 9am-6pm PST.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Can I contribute as a writer?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Absolutely! Visit our "Become a Writer" page or email us at careers@myblog.com.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="widget-link">View all FAQs <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Social Media Widget -->
+                <div class="sidebar-widget social-widget">
+                    <h3 class="widget-title">
+                        <i class="fas fa-share-alt"></i>
+                        Connect With Us
+                    </h3>
+                    <div class="social-grid">
+                        <a href="#" class="social-item facebook">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="#" class="social-item twitter">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="#" class="social-item instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="#" class="social-item linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="#" class="social-item github">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="#" class="social-item medium">
+                            <i class="fab fa-medium-m"></i>
+                            <span>Medium</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Support Hours Widget -->
+                <div class="sidebar-widget support-widget">
+                    <h3 class="widget-title">
+                        <i class="fas fa-headset"></i>
+                        Live Support
+                    </h3>
+                    <div class="support-content">
+                        <div class="support-availability">
+                            <span class="availability-badge available">
+                                <span class="dot"></span> Available Now
+                            </span>
+                        </div>
+                        <p class="support-text">Our support team is online and ready to help you.</p>
+                        <button class="btn-chat" onclick="startChat()">
+                            <i class="fas fa-comment-dots"></i>
+                            Start Live Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section">
+    <div class="map-container">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100939.996409659!2d-122.520001!3d37.757815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80859a6d00690021%3A0x4a501367f076adff!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1644262745071!5m2!1sen!2sus" 
+            width="100%" 
+            height="450" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy">
+        </iframe>
+        
+        <div class="map-overlay">
+            <div class="map-card">
+                <div class="map-card-icon">
+                    <i class="fas fa-map-pin"></i>
+                </div>
+                <h4>Our Headquarters</h4>
+                <p>123 Blog Street<br>San Francisco, CA 94105</p>
+                <a href="https://maps.google.com" target="_blank" class="map-link">
+                    Open in Google Maps
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Contact Section -->
+<section class="team-contact-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle">Contact Directly</span>
+            <h2 class="section-title">Get in touch with our <span class="gradient-text">team</span></h2>
+            <p class="section-description">Connect with the right person for your inquiry</p>
+        </div>
+        
+        <div class="team-contact-grid">
+            <div class="team-contact-card">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="John Doe">
+                <h4>John Doe</h4>
+                <p>Founder & Editor-in-Chief</p>
+                <div class="team-contact-links">
+                    <a href="mailto:john@myblog.com"><i class="fas fa-envelope"></i> john@myblog.com</a>
+                    <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+            </div>
+            
+            <div class="team-contact-card">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Jane Smith">
+                <h4>Jane Smith</h4>
+                <p>Senior Editor</p>
+                <div class="team-contact-links">
+                    <a href="mailto:jane@myblog.com"><i class="fas fa-envelope"></i> jane@myblog.com</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+            
+            <div class="team-contact-card">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Mike Johnson">
+                <h4>Mike Johnson</h4>
+                <p>Technical Support</p>
+                <div class="team-contact-links">
+                    <a href="mailto:mike@myblog.com"><i class="fas fa-envelope"></i> mike@myblog.com</a>
+                    <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                </div>
+            </div>
+            
+            <div class="team-contact-card">
+                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Sarah Chen">
+                <h4>Sarah Chen</h4>
+                <p>Community Manager</p>
+                <div class="team-contact-links">
+                    <a href="mailto:sarah@myblog.com"><i class="fas fa-envelope"></i> sarah@myblog.com</a>
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="contact-newsletter">
+    <div class="container">
+        <div class="newsletter-content">
+            <h3>Stay in the loop</h3>
+            <p>Subscribe to our newsletter for updates, news, and exclusive content</p>
+            <form class="newsletter-form-large" id="contactNewsletterForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="email" 
+                           placeholder="Enter your email address" 
+                           required
+                           class="newsletter-input">
+                    <button type="submit" class="btn-subscribe">
+                        Subscribe
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p class="form-note">
+                    <i class="fas fa-shield-alt"></i>
+                    No spam. Unsubscribe anytime.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Contact Hero Section */
+.contact-hero {
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6rem 0 8rem;
+    overflow: hidden;
+}
+
+.contact-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-shape {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.hero-shape svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 120px;
+}
+
+.hero-shape .shape-fill {
+    fill: #FFFFFF;
+}
+
+/* Info Cards Section */
+.info-cards-section {
+    padding: 3rem 0;
+    background: white;
+}
+
+.info-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.info-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+}
+
+.info-card:hover::before {
+    transform: scaleX(1);
+}
+
+.info-card-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: white;
+    font-size: 1.75rem;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover .info-card-icon {
+    transform: scale(1.1) rotate(360deg);
+}
+
+.info-card-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.info-card-text {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.info-card-hours {
+    color: #999;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.info-card-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: gap 0.3s ease;
+}
+
+.info-card-link:hover {
+    gap: 0.75rem;
+    color: #764ba2;
+}
+
+.info-card-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 1rem;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 50px;
+    font-size: 0.875rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #2e7d32;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(46, 125, 50, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(46, 125, 50, 0);
+    }
+}
+
+/* Main Contact Section */
+.contact-main-section {
+    padding: 3rem 0;
+    background: #f8f9fa;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+/* Contact Form */
+.contact-form-wrapper {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-badge {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.form-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-description {
+    color: #666;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group label i {
+    color: #667eea;
+    margin-right: 0.5rem;
+}
+
+.required {
+    color: #dc3545;
+    margin-left: 0.25rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-control.error {
+    border-color: #dc3545;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.character-count {
+    text-align: right;
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 0.25rem;
+}
+
+.checkbox-group {
+    margin: 1.5rem 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: #333;
+}
+
+.checkbox-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label input:checked ~ .checkmark {
+    background: #667eea;
+    border-color: #667eea;
+}
+
+.checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-label input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.privacy-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.privacy-link:hover {
+    text-decoration: underline;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit i {
+    transition: transform 0.3s ease;
+}
+
+.btn-submit:hover i {
+    transform: translateX(5px);
+}
+
+.spinner {
+    position: absolute;
+    right: 1rem;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.form-note i {
+    color: #667eea;
+}
+
+/* Contact Sidebar */
+.contact-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar-widget {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.widget-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.widget-title i {
+    color: #667eea;
+}
+
+/* FAQ Widget */
+.faq-item {
+    margin-bottom: 1rem;
+}
+
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    color: #333;
+    font-weight: 500;
+}
+
+.faq-question i {
+    color: #667eea;
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    display: none;
+    padding: 0.5rem 0;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+.widget-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.widget-link:hover {
+    gap: 0.75rem;
+}
+
+/* Social Widget */
+.social-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.social-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-item.facebook {
+    background: #1877f2;
+}
+
+.social-item.twitter {
+    background: #1da1f2;
+}
+
+.social-item.instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-item.linkedin {
+    background: #0077b5;
+}
+
+.social-item.github {
+    background: #333;
+}
+
+.social-item.medium {
+    background: #00ab6c;
+}
+
+.social-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.social-item i {
+    font-size: 1.25rem;
+}
+
+.social-item span {
+    font-size: 0.875rem;
+}
+
+/* Support Widget */
+.support-widget {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.support-widget .widget-title i {
+    color: white;
+}
+
+.support-widget .widget-title {
+    border-bottom-color: rgba(255,255,255,0.2);
+}
+
+.availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 1rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50px;
+    font-size: 0.875rem;
+}
+
+.availability-badge .dot {
+    width: 8px;
+    height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.support-text {
+    margin: 1rem 0;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.btn-chat {
+    width: 100%;
+    padding: 0.75rem;
+    background: white;
+    color: #667eea;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-chat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Map Section */
+.map-section {
+    position: relative;
+    margin: 3rem 0;
+}
+
+.map-container {
+    position: relative;
+    height: 450px;
+}
+
+.map-container iframe {
+    filter: grayscale(0.5) sepia(0.1);
+    transition: filter 0.3s ease;
+}
+
+.map-container iframe:hover {
+    filter: grayscale(0) sepia(0);
+}
+
+.map-overlay {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.map-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    max-width: 300px;
+}
+
+.map-card-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.map-card h4 {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.map-card p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.map-link:hover {
+    gap: 0.75rem;
+}
+
+/* Team Contact Section */
+.team-contact-section {
+    padding: 3rem 0;
+    background: white;
+}
+
+.section-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+.section-subtitle {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #667eea;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.section-description {
+    color: #666;
+}
+
+.team-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.team-contact-card {
+    text-align: center;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.team-contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+}
+
+.team-contact-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    border: 4px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.team-contact-card h4 {
+    margin-bottom: 0.25rem;
+    color: #333;
+}
+
+.team-contact-card p {
+    color: #667eea;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.team-contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.team-contact-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    transition: color 0.3s ease;
+}
+
+.team-contact-links a:hover {
+    color: #667eea;
+}
+
+.team-contact-links i {
+    color: #667eea;
+}
+
+/* Newsletter Section */
+.contact-newsletter {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0;
+}
+
+.newsletter-content {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.newsletter-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-content p {
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.newsletter-form-large .form-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.newsletter-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.newsletter-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+}
+
+.btn-subscribe {
+    padding: 0.75rem 2rem;
+    background: white;
+    color: #667eea;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-subscribe:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.form-note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.form-note i {
+    margin-right: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .info-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .map-overlay {
+        right: 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .social-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .map-overlay {
+        position: static;
+        transform: none;
+        margin-top: 1rem;
+    }
+    
+    .map-card {
+        max-width: 100%;
+    }
+    
+    .newsletter-form-large .form-group {
+        flex-direction: column;
+    }
+    
+    .btn-subscribe {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-contact-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-title {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+<script>
+// Character counter for message field
+document.getElementById('message')?.addEventListener('input', function() {
+    const charCount = this.value.length;
+    document.getElementById('charCount').textContent = charCount;
+    
+    if (charCount > 500) {
+        this.value = this.value.substring(0, 500);
+        document.getElementById('charCount').textContent = 500;
+    }
+});
+
+// FAQ Accordion
+document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+        const faqItem = question.closest('.faq-item');
+        faqItem.classList.toggle('active');
+    });
+});
+
+// Form submission
+document.getElementById('contactForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Basic validation
+    let isValid = true;
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const subject = document.getElementById('subject');
+    const message = document.getElementById('message');
+    const privacy = document.querySelector('input[name="privacy"]');
+    
+    // Reset error messages
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    document.querySelectorAll('.form-control').forEach(el => el.classList.remove('error'));
+    
+    // Validate name
+    if (!name.value.trim()) {
+        document.getElementById('nameError').textContent = 'Name is required';
+        name.classList.add('error');
+        isValid = false;
+    }
+    
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.value.trim()) {
+        document.getElementById('emailError').textContent = 'Email is required';
+        email.classList.add('error');
+        isValid = false;
+    } else if (!emailRegex.test(email.value)) {
+        document.getElementById('emailError').textContent = 'Please enter a valid email address';
+        email.classList.add('error');
+        isValid = false;
+    }
+    
+    // Validate subject
+    if (!subject.value) {
+        document.getElementById('subjectError').textContent = 'Please select a subject';
+        subject.classList.add('error');
+        isValid = false;
+    }
+    
+    // Validate message
+    if (!message.value.trim()) {
+        document.getElementById('messageError').textContent = 'Message is required';
+        message.classList.add('error');
+        isValid = false;
+    }
+    
+    // Validate privacy policy
+    if (!privacy.checked) {
+        alert('Please agree to the Privacy Policy');
+        isValid = false;
+    }
+    
+    if (!isValid) return;
+    
+    // Show loading state
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnIcon = submitBtn.querySelector('i:not(.fa-spinner)');
+    const spinner = submitBtn.querySelector('.spinner');
+    
+    btnText.style.opacity = '0';
+    btnIcon.style.display = 'none';
+    spinner.style.display = 'inline-block';
+    submitBtn.disabled = true;
+    
+    // Simulate API call (replace with actual form submission)
+    setTimeout(() => {
+        // Reset button state
+        btnText.style.opacity = '1';
+        btnIcon.style.display = 'inline-block';
+        spinner.style.display = 'none';
+        submitBtn.disabled = false;
+        
+        // Show success message
+        alert('Thank you for your message! We\'ll get back to you soon.');
+        this.reset();
+        document.getElementById('charCount').textContent = '0';
+    }, 1500);
+});
+
+// Newsletter form submission
+document.getElementById('contactNewsletterForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = this.querySelector('input[type="email"]').value;
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/subscribe/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ email: email })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            alert('Thanks for subscribing! Check your email for confirmation.');
+            this.reset();
+        } else {
+            alert('Something went wrong. Please try again.');
+        }
+    } catch (error) {
+        alert('Network error. Please try again.');
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+// Live chat function
+function startChat() {
+    alert('Live chat would open here. This is a demo functionality.');
+}
+
+// Animate stats on scroll
+const observerOptions = {
+    threshold: 0.3
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.info-card, .team-contact-card').forEach(el => {
+    observer.observe(el);
+});
+</script>
+{% endblock %}
